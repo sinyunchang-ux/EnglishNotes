@@ -26,20 +26,33 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
+        id: build
         run: |
+          set +e
           ./gradlew assembleDebug --stacktrace 2>&1 | tee build_output.txt
           EXIT_CODE=${PIPESTATUS[0]}
-          if [ $EXIT_CODE -ne 0 ]; then
-            echo "## Build Failed" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            grep -E "(error:|Error:|FAILED|Exception|Unresolved|cannot find)" build_output.txt | tail -80 >> $GITHUB_STEP_SUMMARY || true
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            echo "### Last 50 lines" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            tail -50 build_output.txt >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
           exit $EXIT_CODE
+
+      - name: Commit error log back to repo
+        if: failure()
+        run: |
+          # Extract key error lines
+          echo "# Build Error Log" > build_error.md
+          echo "## Error lines" >> build_error.md
+          echo '```' >> build_error.md
+          grep -E "(error:|Error:|FAILED|Exception|Unresolved|cannot find|Could not)" build_output.txt | grep -v "^Note:" | tail -80 >> build_error.md || true
+          echo '```' >> build_error.md
+          echo "## Last 80 lines" >> build_error.md
+          echo '```' >> build_error.md
+          tail -80 build_output.txt >> build_error.md
+          echo '```' >> build_error.md
+
+          git config user.email "action@github.com"
+          git config user.name "GitHub Action"
+          git add build_error.md
+          git commit -m "Add build error log for diagnosis"
+          git push
 
       - name: Upload APK
         if: success()
@@ -48,11 +61,3 @@ jobs:
           name: EnglishNotes-debug
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
-
-      - name: Upload build log on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: build_output.txt
-          retention-days: 7
