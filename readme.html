@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英文筆記 App — 說明文件</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --blue:       #1A73E8;
+    --blue-dark:  #1557B0;
+    --blue-light: #E8F0FE;
+    --green:      #34A853;
+    --green-light:#E6F4EA;
+    --gold:       #F9AB00;
+    --red:        #EA4335;
+    --ink:        #1C2128;
+    --ink-2:      #3D4450;
+    --ink-3:      #6B7280;
+    --rule:       #E5E7EB;
+    --surface:    #F8FAFF;
+    --white:      #FFFFFF;
+    --radius:     10px;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Inter', 'Noto Sans TC', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--surface);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* ── Header ── */
+  header {
+    background: linear-gradient(135deg, #1557B0 0%, #1A73E8 60%, #4A9EFF 100%);
+    color: white;
+    padding: 56px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 280px; height: 280px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 30%;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .app-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  header p {
+    font-size: 16px;
+    opacity: 0.85;
+    max-width: 520px;
+  }
+  .header-meta {
+    margin-top: 28px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-family: var(--mono);
+  }
+
+  /* ── Nav ── */
+  nav {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  }
+  .nav-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    padding: 0 40px;
+    overflow-x: auto;
+  }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: var(--ink-3);
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  nav a:hover { color: var(--blue); border-bottom-color: var(--blue-light); }
+  nav a.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .nav-num {
+    background: var(--blue-light);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  /* ── Layout ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  section {
+    margin-bottom: 64px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--rule);
+  }
+  .section-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .icon-blue  { background: var(--blue-light); }
+  .icon-green { background: var(--green-light); }
+  .icon-gold  { background: #FEF3C7; }
+
+  .section-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .section-header span {
+    font-size: 13px;
+    color: var(--ink-3);
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ── Cards ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: box-shadow 0.15s, transform 0.15s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(26,115,232,0.1); transform: translateY(-1px); }
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+
+  /* ── Steps ── */
+  .steps { display: flex; flex-direction: column; gap: 0; }
+  .step {
+    display: flex;
+    gap: 20px;
+    position: relative;
+  }
+  .step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 42px;
+    bottom: 0;
+    width: 2px;
+    background: var(--rule);
+  }
+  .step-num {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .step-body {
+    padding-bottom: 28px;
+    flex: 1;
+  }
+  .step-body h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 6px;
+    padding-top: 8px;
+  }
+  .step-body p, .step-body li {
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.65;
+  }
+  .step-body ul { padding-left: 16px; margin-top: 6px; }
+  .step-body li { margin-bottom: 3px; }
+
+  /* ── Code blocks ── */
+  pre {
+    background: #1C2128;
+    color: #E6EDF3;
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 16px 0;
+    border: 1px solid #30363D;
+  }
+  code {
+    font-family: var(--mono);
+    background: #EEF2FF;
+    color: var(--blue-dark);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+  .kw  { color: #FF7B72; }
+  .str { color: #A5D6FF; }
+  .cm  { color: #8B949E; font-style: italic; }
+  .fn  { color: #D2A8FF; }
+  .num { color: #79C0FF; }
+
+  /* ── Table ── */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--rule); }
+  table { width: 100%; border-collapse: collapse; background: var(--white); }
+  thead tr { background: var(--surface); }
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+  }
+  td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--ink-2);
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface); }
+
+  /* ── Callout ── */
+  .callout {
+    display: flex;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    margin: 16px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout.info    { background: var(--blue-light);  border-left: 3px solid var(--blue); }
+  .callout.success { background: var(--green-light); border-left: 3px solid var(--green); }
+  .callout.warn    { background: #FEF3C7; border-left: 3px solid var(--gold); }
+
+  /* ── Feature list ── */
+  .feature-list { display: flex; flex-direction: column; gap: 10px; }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+  }
+  .feature-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+  .feature-item strong { font-size: 14px; color: var(--ink); display: block; margin-bottom: 2px; }
+  .feature-item p { font-size: 13px; color: var(--ink-3); margin: 0; }
+
+  /* ── Tag ── */
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 2px;
+  }
+  .tag-blue  { background: var(--blue-light);  color: var(--blue-dark); }
+  .tag-green { background: var(--green-light); color: #1E7E34; }
+  .tag-gray  { background: #F1F3F4; color: var(--ink-3); }
+  .tag-red   { background: #FEE8E6; color: #C5221F; }
+
+  /* ── Architecture diagram ── */
+  .arch-diagram {
+    background: #1C2128;
+    border-radius: var(--radius);
+    padding: 24px;
+    border: 1px solid #30363D;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .arch-diagram pre {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    color: #E6EDF3;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  /* ── File tree ── */
+  .file-tree {
+    background: #1C2128;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    border: 1px solid #30363D;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: #E6EDF3;
+    line-height: 1.9;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  .ft-dir  { color: #79C0FF; font-weight: 600; }
+  .ft-file { color: #A5D6FF; }
+  .ft-cm   { color: #8B949E; }
+
+  /* ── Version timeline ── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 16px; position: relative; }
+  .tl-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15px; top: 32px; bottom: 0;
+    width: 2px;
+    background: var(--rule);
+  }
+  .tl-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+  .tl-dot.current { background: var(--blue); color: white; }
+  .tl-dot.future  { background: var(--rule); color: var(--ink-3); border: 2px dashed var(--ink-3); }
+  .tl-body { padding-bottom: 24px; flex: 1; }
+  .tl-body h4 { font-size: 14px; font-weight: 600; padding-top: 6px; margin-bottom: 4px; }
+  .tl-body ul { padding-left: 16px; }
+  .tl-body li { font-size: 13px; color: var(--ink-3); margin-bottom: 2px; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    header { padding: 36px 20px 32px; }
+    .nav-inner { padding: 0 8px; }
+    nav a { padding: 14px 12px; font-size: 13px; }
+    main { padding: 32px 20px 60px; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="header-inner">
+    <div class="app-badge">📚 Android App</div>
+    <h1>英文筆記<br>說明文件</h1>
+    <p>記錄英文句子、錄音練習、月曆追蹤，一個 App 搞定英文學習</p>
+    <div class="header-meta">
+      <span class="meta-chip">v1.0.0</span>
+      <span class="meta-chip">Android 8.0+</span>
+      <span class="meta-chip">Kotlin + Jetpack Compose</span>
+      <span class="meta-chip">com.englishnotes</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#guide" class="active"><span class="nav-num">1</span> 操作指引</a>
+    <a href="#arch"><span class="nav-num">2</span> 技術架構</a>
+    <a href="#features"><span class="nav-num">3</span> 功能記錄</a>
+  </div>
+</nav>
+
+<!-- ── Main ── -->
+<main>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — 操作指引
+════════════════════════════════════════════ -->
+<section id="guide">
+  <div class="section-header">
+    <div class="section-icon icon-blue">📖</div>
+    <div>
+      <h2>操作指引</h2>
+      <span>安裝、日常使用、CSV 匯入 的完整步驟說明</span>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)">安裝 APK</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>下載 APK</h3>
+        <p>前往 GitHub Actions 頁面下載最新編譯結果：</p>
+        <pre><code>https://github.com/sinyunchang-ux/EnglishNotes/actions</code></pre>
+        <p>點進最新一次綠色 ✅ 的 <strong>Build APK</strong>，在頁面底部 <strong>Artifacts</strong> 區塊下載 <code>EnglishNotes-debug.zip</code>，解壓縮得到 <code>app-debug.apk</code>。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>傳到手機</h3>
+        <p>任何方式皆可：</p>
+        <ul>
+          <li>用 <strong>Line</strong> 傳給自己（傳送「檔案」而非圖片）</li>
+          <li>用 USB 線傳輸</li>
+          <li>用 Google Drive 上傳再在手機下載</li>
+        </ul>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>允許安裝未知來源</h3>
+        <p>點開 APK 後，Android 會詢問是否允許安裝，選擇 <strong>「允許」</strong> 即可。安裝完成後直接開啟。</p>
+        <div class="callout info">
+          <span class="callout-icon">ℹ️</span>
+          <div>日後更新：直接安裝新版 APK 覆蓋即可，<strong>資料完整保留</strong>，不需解除安裝舊版。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border:none;border-top:1px solid var(--rule);margin:32px 0;">
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)">新增筆記</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>點右上角「＋ 新增」按鈕</h3>
+        <p>進入新增筆記對話框。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>填寫欄位</h3>
+        <ul>
+          <li><strong>英文句子</strong>（必填）</li>
+          <li><strong>中文翻譯</strong>（選填）</li>
+        </ul>
+        <p style="margin-top:8px">「新增日期」會自動帶入今天日期，不需手動填寫。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>點「新增」完成</h3>
+        <p>筆記立即出現在列表第一行。</p>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border:none;border-top:1px solid var(--rule);margin:32px 0;">
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)">錄音</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>點該筆記的麥克風 🎙 按鈕</h3>
+        <p>首次使用會請求麥克風權限，請點「允許」。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>在錄音對話框點「開始錄音」</h3>
+        <p>進度條會顯示目前錄音時長，<strong>最長 180 秒</strong>，時間到自動停止。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>點「停止錄音」儲存</h3>
+        <p>錄音日期自動記錄為今天，月曆上該日期變為<strong style="color:var(--green)">綠色</strong>。</p>
+        <div class="callout warn">
+          <span class="callout-icon">⚠️</span>
+          <div>重新錄音會覆蓋舊錄音，舊錄音無法復原。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border:none;border-top:1px solid var(--rule);margin:32px 0;">
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)">分享錄音到 Line</h3>
+  <div class="callout success">
+    <span class="callout-icon">✅</span>
+    <div>點列表中的 <strong>分享 📤 按鈕</strong> → 系統分享表出現 → 選 <strong>Line</strong> → 選擇對話對象 → 傳送。</div>
+  </div>
+
+  <hr style="border:none;border-top:1px solid var(--rule);margin:32px 0;">
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;color:var(--ink)">CSV 匯入</h3>
+  <p style="margin-bottom:12px;color:var(--ink-2)">可一次大量匯入筆記，不需逐條輸入。</p>
+
+  <div class="callout info">
+    <span class="callout-icon">📄</span>
+    <div>
+      <strong>CSV 格式：第一欄英文，第二欄中文</strong><br>
+      支援有標題列（自動跳過）或無標題列皆可。
+    </div>
+  </div>
+
+  <pre><code><span class="cm"># 範例 CSV 內容（存成 .csv 檔）</span>
+English,Chinese
+I love learning English.,我喜歡學英文。
+The weather is nice today.,今天天氣很好。
+Could you say that again?,你可以再說一次嗎？</code></pre>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <h3>點「匯入 CSV」按鈕</h3>
+        <p>開啟手機檔案選擇器。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <h3>選擇 .csv 檔</h3>
+        <p>可從 Google Drive、下載資料夾等任何位置選取。</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <h3>自動匯入完成</h3>
+        <p>所有筆記以今天為「新增日期」批次加入，無需手動填日期。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — 技術架構
+════════════════════════════════════════════ -->
+<section id="arch">
+  <div class="section-header">
+    <div class="section-icon icon-green">🏗️</div>
+    <div>
+      <h2>技術架構</h2>
+      <span>語言、框架、資料庫、編譯環境的完整技術說明</span>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--ink)">技術堆疊</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>層級</th><th>技術</th><th>版本</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>語言</td><td><span class="tag tag-blue">Kotlin</span></td><td>1.9.22</td><td>Android 官方推薦語言</td></tr>
+        <tr><td>UI 框架</td><td><span class="tag tag-blue">Jetpack Compose</span></td><td>BOM 2024.02</td><td>宣告式 UI，取代傳統 XML Layout</td></tr>
+        <tr><td>導航</td><td><span class="tag tag-gray">Navigation Compose</span></td><td>2.7.7</td><td>畫面切換管理</td></tr>
+        <tr><td>資料庫</td><td><span class="tag tag-green">Room (SQLite)</span></td><td>2.6.1</td><td>本地筆記儲存</td></tr>
+        <tr><td>架構模式</td><td><span class="tag tag-gray">MVVM</span></td><td>—</td><td>ViewModel + StateFlow</td></tr>
+        <tr><td>錄音</td><td><span class="tag tag-gray">MediaRecorder</span></td><td>Android SDK</td><td>音訊錄製，輸出 M4A</td></tr>
+        <tr><td>檔案分享</td><td><span class="tag tag-gray">FileProvider</span></td><td>AndroidX</td><td>安全分享錄音檔</td></tr>
+        <tr><td>CSV 解析</td><td><span class="tag tag-gray">OpenCSV</span></td><td>5.9</td><td>批次匯入筆記</td></tr>
+        <tr><td>建置工具</td><td><span class="tag tag-gray">Gradle KTS</span></td><td>8.4</td><td>專案建置腳本</td></tr>
+        <tr><td>編譯 CI</td><td><span class="tag tag-green">GitHub Actions</span></td><td>—</td><td>自動編譯 APK</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin:28px 0 14px;color:var(--ink)">MVVM 架構圖</h3>
+  <div class="arch-diagram">
+    <pre>
+┌─────────────────────────────────────────────────────┐
+│                      UI Layer                        │
+│                                                      │
+│  MainActivity ──── NavigationBar (列表 / 月曆)       │
+│       │                                              │
+│  TableScreen          CalendarScreen                 │
+│  ├─ NoteRow           ├─ CalendarCell                │
+│  ├─ AddNoteDialog     └─ CalendarNoteCard            │
+│  ├─ EditNoteDialog                                   │
+│  └─ RecordingDialog                                  │
+└───────────────┬─────────────────────────────────────┘
+                │  collectAsState()
+┌───────────────▼─────────────────────────────────────┐
+│                   ViewModel Layer                    │
+│                                                      │
+│              NoteViewModel                           │
+│  ├─ allNotes: StateFlow&lt;List&lt;NoteEntity&gt;&gt;           │
+│  ├─ isRecording: StateFlow&lt;Boolean&gt;                 │
+│  ├─ recordingSeconds: StateFlow&lt;Int&gt;                │
+│  └─ startRecording / stopRecording / cancelRecording │
+└───────────────┬─────────────────────────────────────┘
+                │
+┌───────────────▼─────────────────────────────────────┐
+│                  Repository Layer                    │
+│                                                      │
+│              NoteRepository                          │
+│  └─ 封裝所有 DAO 操作，對 ViewModel 提供單一入口     │
+└───────────────┬─────────────────────────────────────┘
+                │
+┌───────────────▼─────────────────────────────────────┐
+│                    Data Layer                        │
+│                                                      │
+│  NoteDatabase (Room)                                 │
+│  ├─ NoteEntity  (資料表 schema)                      │
+│  └─ NoteDao     (SQL 查詢介面)                       │
+│                                                      │
+│  儲存位置：手機內部儲存 /data/data/com.englishnotes/ │
+└─────────────────────────────────────────────────────┘</pre>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin:28px 0 14px;color:var(--ink)">資料庫 Schema</h3>
+  <pre><code><span class="kw">@Entity</span>(tableName = <span class="str">"notes"</span>)
+<span class="kw">data class</span> <span class="fn">NoteEntity</span>(
+    <span class="kw">@PrimaryKey</span>(autoGenerate = <span class="num">true</span>)
+    <span class="kw">val</span> id: Long = <span class="num">0</span>,
+    <span class="kw">val</span> english: String,          <span class="cm">// 英文句子</span>
+    <span class="kw">val</span> chinese: String,          <span class="cm">// 中文翻譯</span>
+    <span class="kw">val</span> recordingPath: String?,   <span class="cm">// 錄音檔路徑（null = 未錄音）</span>
+    <span class="kw">val</span> addedDate: String,        <span class="cm">// 新增日期 "2026-06-11"</span>
+    <span class="kw">val</span> recordingDate: String?    <span class="cm">// 錄音日期 "2026-06-11"（null = 未錄音）</span>
+)</code></pre>
+
+  <h3 style="font-size:16px;font-weight:700;margin:28px 0 14px;color:var(--ink)">專案檔案結構</h3>
+  <div class="file-tree">
+<span class="ft-dir">EnglishNotes/</span>
+├── <span class="ft-dir">.github/workflows/</span>
+│   └── <span class="ft-file">build.yml</span>          <span class="ft-cm"># GitHub Actions 自動編譯</span>
+├── <span class="ft-dir">app/src/main/</span>
+│   ├── <span class="ft-file">AndroidManifest.xml</span>   <span class="ft-cm"># 權限宣告、FileProvider</span>
+│   ├── <span class="ft-dir">java/com/englishnotes/</span>
+│   │   ├── <span class="ft-file">MainActivity.kt</span>       <span class="ft-cm"># 入口、Tab 導航</span>
+│   │   ├── <span class="ft-dir">data/</span>
+│   │   │   ├── <span class="ft-file">NoteEntity.kt</span>     <span class="ft-cm"># Room 資料表</span>
+│   │   │   ├── <span class="ft-file">NoteDao.kt</span>        <span class="ft-cm"># SQL 查詢</span>
+│   │   │   ├── <span class="ft-file">NoteDatabase.kt</span>   <span class="ft-cm"># 資料庫單例</span>
+│   │   │   └── <span class="ft-file">NoteRepository.kt</span> <span class="ft-cm"># 資料層封裝</span>
+│   │   ├── <span class="ft-dir">viewmodel/</span>
+│   │   │   └── <span class="ft-file">NoteViewModel.kt</span>  <span class="ft-cm"># 業務邏輯、錄音控制</span>
+│   │   └── <span class="ft-dir">ui/</span>
+│   │       ├── <span class="ft-file">Theme.kt</span>          <span class="ft-cm"># 色彩、排版系統</span>
+│   │       ├── <span class="ft-file">TableScreen.kt</span>    <span class="ft-cm"># 表格列表畫面</span>
+│   │       ├── <span class="ft-file">CalendarScreen.kt</span> <span class="ft-cm"># 月曆畫面</span>
+│   │       ├── <span class="ft-file">AddNoteDialog.kt</span>  <span class="ft-cm"># 新增筆記</span>
+│   │       ├── <span class="ft-file">EditNoteDialog.kt</span> <span class="ft-cm"># 編輯筆記</span>
+│   │       └── <span class="ft-file">RecordingDialog.kt</span><span class="ft-cm"># 錄音介面</span>
+│   └── <span class="ft-dir">res/</span>
+│       ├── <span class="ft-dir">mipmap-*/</span>             <span class="ft-cm"># App 圖示（各解析度）</span>
+│       ├── <span class="ft-dir">values/</span>               <span class="ft-cm"># strings.xml, themes.xml</span>
+│       └── <span class="ft-dir">xml/</span>
+│           └── <span class="ft-file">file_paths.xml</span>    <span class="ft-cm"># FileProvider 路徑設定</span>
+├── <span class="ft-file">build.gradle.kts</span>           <span class="ft-cm"># Root 建置設定</span>
+├── <span class="ft-file">settings.gradle.kts</span>        <span class="ft-cm"># 模組宣告</span>
+├── <span class="ft-file">gradle.properties</span>          <span class="ft-cm"># AndroidX 啟用設定</span>
+└── <span class="ft-file">gradlew</span>                    <span class="ft-cm"># Gradle Wrapper 執行腳本</span>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin:28px 0 14px;color:var(--ink)">CI / CD — GitHub Actions</h3>
+  <div class="callout info">
+    <span class="callout-icon">🤖</span>
+    <div>每次 push 到 <code>main</code> 分支，或手動觸發，GitHub 會自動在雲端編譯 APK，無需本機 Android Studio。</div>
+  </div>
+  <pre><code><span class="cm"># 編譯流程</span>
+push to main
+    ↓
+ubuntu-latest runner 啟動
+    ↓
+JDK 17 + Android SDK 安裝
+    ↓
+./gradlew assembleDebug
+    ↓
+app-debug.apk  →  Actions Artifacts（保留 30 天）</code></pre>
+
+</section>
+
+<!-- ══════════════════════════════════════════
+     SECTION 3 — 功能記錄
+════════════════════════════════════════════ -->
+<section id="features">
+  <div class="section-header">
+    <div class="section-icon icon-gold">📋</div>
+    <div>
+      <h2>功能記錄</h2>
+      <span>已實作功能、版本更新記錄、待辦清單</span>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin-bottom:14px;color:var(--ink)">已實作功能</h3>
+  <div class="feature-list">
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>📊 表格列表視圖</strong>
+        <p>類 Google 試算表呈現方式，顯示英文、中文、錄音操作、新增日期、錄音日期五欄；支援橫向滑動。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>📅 月曆視圖</strong>
+        <p>以月為單位顯示筆記分佈。有錄音的日期顯示<strong style="color:var(--green)">綠色</strong>，有筆記但無錄音顯示<strong style="color:var(--blue)">藍色</strong>，點擊日期展開當天筆記列表。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>🎙 錄音（最長 180 秒）</strong>
+        <p>每筆筆記可附一段錄音，進度條顯示時長，到達 180 秒自動停止。錄音格式 M4A，儲存於 App 內部目錄。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>▶️ 播放錄音</strong>
+        <p>在列表直接點播放鍵收聽錄音，播放中顯示停止按鈕，播完自動重置。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>📤 分享錄音到 Line</strong>
+        <p>透過 Android 系統分享表，可分享到 Line、訊息、Email 等任意 App；分享內容包含錄音檔及英文、中文文字。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>➕ 單條新增筆記</strong>
+        <p>彈出對話框逐欄填寫，英文必填、中文選填。新增日期自動記錄當天，格式 <code>2026-06-11</code>。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>📥 CSV 批次匯入</strong>
+        <p>選取 CSV 檔後自動解析，第一欄英文、第二欄中文，支援有/無標題列，批次新增不佔用操作時間。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>✏️ 編輯筆記</strong>
+        <p>可修改任一筆記的英文與中文內容，錄音獨立保存不受影響。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>🗑️ 刪除筆記</strong>
+        <p>刪除時同步刪除對應錄音檔，釋放儲存空間；刪除前有確認對話框防止誤觸。</p>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-dot"></div>
+      <div>
+        <strong>📆 自動日期記錄</strong>
+        <p>新增日期與錄音日期皆自動帶入操作當天，格式統一為 <code>YYYY-MM-DD</code>，無需手動輸入。</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin:32px 0 14px;color:var(--ink)">版本更新記錄</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot current">1.0</div>
+      <div class="tl-body">
+        <h4>v1.0.0 <span class="tag tag-green" style="font-size:11px;">目前版本</span> — 2026-06-11</h4>
+        <ul>
+          <li>首次發布</li>
+          <li>表格列表 + 月曆雙視圖</li>
+          <li>錄音、播放、分享功能</li>
+          <li>單條新增 + CSV 批次匯入</li>
+          <li>編輯 / 刪除筆記</li>
+          <li>GitHub Actions 自動編譯 APK</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot future">…</div>
+      <div class="tl-body">
+        <h4>待規劃功能</h4>
+        <ul>
+          <li>搜尋、篩選筆記</li>
+          <li>匯出 CSV</li>
+          <li>筆記標籤 / 分類</li>
+          <li>App 圖示優化</li>
+          <li>深色模式（Dark Mode）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;margin:32px 0 14px;color:var(--ink)">權限說明</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>權限</th><th>用途</th><th>必要性</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>RECORD_AUDIO</code></td>
+          <td>麥克風錄音</td>
+          <td><span class="tag tag-red">必要</span></td>
+        </tr>
+        <tr>
+          <td><code>READ_MEDIA_AUDIO</code></td>
+          <td>Android 13+ 讀取音訊檔</td>
+          <td><span class="tag tag-gray">視版本</span></td>
+        </tr>
+        <tr>
+          <td><code>READ/WRITE_EXTERNAL_STORAGE</code></td>
+          <td>Android 12 以下儲存存取</td>
+          <td><span class="tag tag-gray">視版本</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+// Active nav highlight on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
